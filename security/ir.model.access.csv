@@ -1,0 +1,6 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_plm_plm,plm_plm,model_plm_plm,plm.group_user_plm,1,1,1,1
+access_tranche_horaire,tranche_horaire,model_tranche_horaire,plm.group_user_plm,1,1,1,1
+access_plm_unit,plm_plm,model_plm_unit,plm.group_user_plm,1,1,1,1
+access_equipe_equipe,plm_equipe_equipe,model_equipe_equipe,plm.group_user_plm,1,1,1,1
+access_model_impression,plm_model_impression,model_model_impression,plm.group_user_plm,1,1,1,1

@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+        <template id="assets_backend_plm" name="plm_asset assets" inherit_id="web.assets_backend">
+            <xpath expr="." position="inside">
+            	<link rel="stylesheet" href="/plm/static/src/less/timesheet.less"/>
+                <script type="text/javascript" src="/plm/static/src/js/plm.js"></script>
+            </xpath>
+        </template>
+</odoo>

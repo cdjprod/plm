@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+  
+        <record id="paperformat_plm_3" model="report.paperformat">
+            <field name="name">plm_plm</field>
+            <field name="default" eval="True"/>
+            <field name="orientation">Landscape</field>
+            <field name="header_spacing">35</field>
+            <field name="margin_top">35</field>
+            <field name="margin_bottom">10</field>
+            <field name="dpi">80</field>
+        </record>
+
+        <record id="report_plm" model="ir.actions.report.xml">
+            <field name="name">plm_plm</field>
+            <field name="report_name">plm_plm</field>
+            <field name="model">plm.plm</field>
+            <field name="paperformat_id" ref="paperformat_plm_3"/>
+        </record>
+
+		<report 
+            id="report_plm"
+            model="plm.plm"
+            string="PLM"
+            report_type="qweb-pdf"
+            name="plm.report_plm_plm"
+            file="plm.report_plm_plm"
+        />
+
+        <template id="report_plm_plm">
+            <style type="text/css">
+                .titre {
+                color:#555487;
+                background-color:#E2E2E0
+                }
+            </style>
+               
+    
+            <t t-call="report.html_container">
+            <t t-foreach="docs" t-as="o">
+                <div class="header">
+                    <div class="row">
+                    <div class="col-xs-2">
+                        <span t-if="logo and logo.logo" t-field="logo.logo" t-field-options='{"widget": "image", "alt-field": "name"}' style="width:1cm;height:1cm;max-height:0.4cm"/>
+                    </div>
+                </div>
+                </div>
+                <div class="page">               
+                 <div class="row">
+                    <div class="col-xs-2" style="margin-top:1cm">
+                        <span t-field="o.user_id.image" t-field-options='{"widget": "image"}' style="margin-top:1cm;width:3cm;height:3cm;" />
+                    </div>
+                    <div class="col-xs-6"> 
+                        <h3 style="margin-top:1cm"><span t-field="o.name" style="color:#555487;"/></h3>
+                        <table class="table table-bordered" style="margin-top:1cm;">
+                            <tr>
+                                <td class="text-left" style="font-weight:900"> Auteur : </td> 
+                                <td class="text-left" style="color: #575756;margin-left:1cm"> <span t-field="o.user_id.name"/></td> 
+                            </tr>
+                            <tr>
+                                <td class="text-left" style="font-weight:900">Chaine :  </td> 
+                                <td class="text-left" style="color: #575756;"><span t-field="o.chaine"/></td>
+                            </tr>
+                            <tr>
+                                <td class="text-left" style="font-weight:900">Campagne :   </td>
+                                <td class="text-left" style="color: #575756;"><span t-field="o.campagne"/></td> 
+                            </tr>
+                            <tr>
+                                <td class="text-left" style="font-weight:900">Date début :   </td>
+                                <td class="text-left" style="color: #575756;"><span t-field="o.date_from"/></td>
+                                 
+                            </tr>
+                            <tr>
+                            <td class="text-left" style="font-weight:900">Date fin :   </td>
+                                <td class="text-left" style="color: #575756;"><span t-field="o.date_to"/></td> 
+                            </tr>
+                        </table>     
+                    </div>
+                  </div> 
+
+                
+                <table class="table table-bordered" style="margin-top:1cm">
+                    
+                        <tr>
+                            <th t-foreach="value1" t-as="row" class="text-center titre" style="color:#555487;bg-color:#E2E2E0" bgcolor="#E2E2E0">
+                                <span t-esc="row"/>
+                            </th>
+                        </tr>
+
+                   <tr t-foreach="value" t-as="line">
+                        <td t-foreach="line" t-as="row" class="text-right">
+                            <span t-if="row==0"></span>
+                            <span t-if="not row==0"><t t-esc="row"/></span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td t-foreach="value2" t-as="row" class="text-right titre" style="color:#575756;font-weight:900" bgcolor="#E2E2E0">
+                            <span t-if="row==0"></span>
+                            <span t-if="not row==0"><t t-esc="row"/></span>
+                        </td>
+                    </tr>
+                </table>                                       
+            </div>
+
+            <div class="footer row">
+                    <div class="col-xs-12">
+                       <center><span class="text-center" t-esc="logo.name"/></center>
+                    </div>
+                </div>
+            </t>
+           </t>
+        </template>   
+ </odoo>

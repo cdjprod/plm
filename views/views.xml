@@ -1,0 +1,173 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="plm_view" model="ir.ui.view">
+            <field name="name">plm_plm_view</field>
+            <field name="model">plm.plm</field>
+            <field name="arch" type="xml">
+                <form string="PLM">
+                    <header>
+                        <button name="action_confirm" states="draft" string="Soummettre au responsable" type="object" class="oe_highlight"/>
+                        <button name="action_done" states="confirm" string="Approuver" type="object"  class="oe_highlight"/>
+                        <button name="action_draft" states="done" string="Remettre au brouillon" type="object" />
+                        <button name="action_draft_confirm" states="confirm" string="Refuser" type="object"/>
+                        <field name="state" widget="statusbar" statusbar_visible="new,confirm,done"/> 
+                </header>
+                <sheet>
+                  <div class="oe_title">
+                        <label for="user_id" class="oe_edit_only"/>
+                        <h1><field name="user_id" class="oe_inline" readonly="1"/></h1>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="name"/>
+                            <label for="date_from" string=""/>
+                            <div><field name="date_from" class="oe_inline"/> to <field name="date_to" class="oe_inline"/></div>
+                            <field name="option"/>
+                        </group>
+                        <group>
+                            <field name="chaine"/>
+                            <field name="campagne"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Summary">
+                            <widget type="PLMsheet">
+                            </widget>
+                        </page>
+                        <page string="Liste" class="o_hr_timesheet_sheet_details" invisible="1">
+                            <field context="{'user_id':user_id}" name="plm_units" nolabel="1">
+                                <tree editable="bottom" string="tranche horaire">
+                                          <field name="date"/>
+                                          <field name="unit_amount"/>
+                                          <field name="tranche_horaire_id"/>
+                                          <field name="coef"/>
+                                </tree>
+                            </field>
+                        </page>
+                    </notebook>
+                </sheet>
+                </form>
+            </field>
+        </record>
+
+
+        <record id="plm_filter" model="ir.ui.view">
+            <field name="name">plm.sheet.filter</field>
+            <field name="model">plm.plm</field>
+            <field name="arch" type="xml">
+                <search string="Recherche">
+                    <field name="date_from"/>
+                    <filter name="new" string="Brouillon" domain="[('state','in',('draft', 'new'))]"/>
+                    <filter name="to_approve" string="A approuver" domain="[('state','=','confirm')]" />
+                    <field name="user_id"/>
+                    <group expand="0" string="Group By">
+                        <filter string="Auteur" domain="[]" context="{'group_by':'user_id'}"/>
+                    </group>
+                </search>
+            </field>
+        </record>
+
+
+        <record id="plm_tree_view" model="ir.ui.view">
+            <field name="name">plm_tree_view</field>
+            <field name="model">plm.plm</field>
+            <field name="arch" type="xml">
+                <tree string="PLM">
+                  <field name="name"/>
+                  <field name="chaine"/>
+                  <field name="user_id"/>
+                  <field name="total_display"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="tranche_horaire_view" model="ir.ui.view">
+            <field name="name">tranche_horaire_view</field>
+            <field name="model">tranche.horaire</field>
+            <field name="arch" type="xml">
+                <form string="Tranche">
+                  <field name="name"/>
+                </form>
+            </field>
+        </record>
+
+        <record id="model_impression_view" model="ir.ui.view">
+            <field name="name">model_impression_view</field>
+            <field name="model">model.impression</field>
+            <field name="arch" type="xml">
+                <form>
+                    <sheet>
+                        <group>
+                              <field name="name"/>
+                              <field name="logo" widget='image'/>
+                              <field name="actif"/>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        
+       <record id="plm_action" model="ir.actions.act_window">
+            <field name="name">PLM</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">plm.plm</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+
+        <record id="model_impression_action" model="ir.actions.act_window">
+            <field name="name">Impression</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">model.impression</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+
+        <record id="tranche_horaire_action" model="ir.actions.act_window">
+            <field name="name">tranche_horaire</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">tranche.horaire</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+
+
+        <record id="plm_form_approve" model="ir.actions.act_window">
+            <field name="name">PLM à approuver</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">plm.plm</field>
+            <field name="view_type">form</field>
+            <field name="view_id" eval="False"/>
+            <field name="context">{'search_default_to_approve':1}</field>
+            <field name="search_view_id" ref="plm_filter"/>
+        </record>
+
+
+        <record id="user_id" model="ir.ui.view">
+            <field name="name">user</field>
+            <field name="model">res.users</field>
+            <field name="inherit_id" ref="base.view_users_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='partner_id']" position="after">
+                    <field name="equipe"/>
+                </xpath>
+            </field>
+        </record>
+        
+
+        <menuitem id="main_plm_menu" name="PLM" sequence="8"/>
+
+        <menuitem id="plm_menu" name="PLM" sequence="1"
+                  parent="main_plm_menu"/>
+
+        <menuitem id="plm_menu_action" name="PLM" sequence="1"
+                  parent="plm_menu" action="plm_action"/>
+        <menuitem id="menu_plm_approve" name="PLM à approver"  action="plm_form_approve" parent="plm_menu" sequence="2"/>
+
+        <menuitem id="tranche_menu_horaire_action" name="Tranche horaire" sequence="3" groups="base.group_erp_manager"
+                  parent="plm_menu" action="tranche_horaire_action"/>
+
+        <menuitem id="tranche_menu_model_impression" name="Description" sequence="4" groups="base.group_erp_manager"
+                  parent="plm_menu" action="model_impression_action"/>
+</odoo>
