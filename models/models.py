@@ -205,18 +205,18 @@ class plm_unit(models.Model):
     def get_pression(self):
         for record in self:
             liste={
-                1:'Janvier',
-                2:'Fevrier',
-                3:'Mars',
-                4:'Avril',
-                5:'Mai',
-                6:'Juin',
-                7:'Juillet',
-                8:'Aout',
-                9:'Septembre',
-                10:'Octobre',
-                11:'Novembre',
-                12:'Decembre',
+                1:'janvier',
+                2:'février',
+                3:'mars',
+                4:'avril',
+                5:'mai',
+                6:'juin',
+                7:'juillet',
+                8:'août',
+                9:'septembre',
+                10:'octobre',
+                11:'novembre',
+                12:'décembre',
             }
             if record.option == "rd":
                 mois = (fields.Date.from_string(record.date)).month

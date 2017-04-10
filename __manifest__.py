@@ -24,11 +24,11 @@
 
     # always loaded
     'data': [
+        'security/group.xml',
         'security/ir.model.access.csv',
+        'security/rule.xml',
         'views/views.xml',
         'views/templates.xml',
-        'security/group.xml',
-        'security/rule.xml',
         'report/plm.xml'
     ],
     # only loaded in demonstration mode
