@@ -23,7 +23,7 @@ class plm(models.Model):
         emp_ids = self.env['res.users'].search([('id', '=', self.env.uid)])
         return emp_ids and emp_ids[0] or False
 
-    name = fields.Char('Titre')
+    name = fields.Char('Spot')
     chaine = fields.Char('Chaine')
     campagne = fields.Char('Campagne')
     date_from = fields.Date(string='Date de début',required=True,default=_default_date_from,
@@ -35,7 +35,7 @@ class plm(models.Model):
     plm_units = fields.One2many('plm.unit','plm')
 
     somme_total = fields.Integer('super Total',compute="get_total")
-    total_display = fields.Integer('Total',compute="_compute_total_display")
+    total_display = fields.Integer('Total GRP',compute="_compute_total_display")
 
     state = fields.Selection([
         ('new', 'Nouveau'),
@@ -60,11 +60,11 @@ class plm(models.Model):
             dates_list= []
             for i in range(delta.days + 1):
                 dates_list.append(fields.Date.to_string(fields.Date.from_string(start)+timedelta(days=i)))
-            dates_liste = ["T - H"]
+            dates_liste = ["Horaire"]
             for i in range(delta.days + 1):
                 daty = (fields.Date.from_string(start)+timedelta(days=i)).day
                 dates_liste.append(daty)
-            dates_liste.append('Total')    
+            dates_liste.append('Nb Diff')    
             Liste.append(dates_liste)
             for tranche in record.tranche_horaire_ids:
                 liste = []
@@ -89,7 +89,7 @@ class plm(models.Model):
     @api.multi
     def get_somme_total(self):
         for record in self:
-            Liste = ['Total']
+            Liste = ['Total GRP']
             dates_list = []
             start = record.date_from
             end = record.date_to
@@ -221,11 +221,11 @@ class plm_unit(models.Model):
             if record.option == "rd":
                 mois = (fields.Date.from_string(record.date)).month
                 if 0<=(fields.Date.from_string(record.date)).weekday()<=4:
-                    val = self.env['mmrd.ensemble'].search([('name', '=',record.chaine),('slotens','=',record.tranche_horaire_id.name),('jour','=','semaine'),('mois','=',liste[mois])])
+                    val = self.env['mmrd.ensemble'].search([('name', '=',record.chaine),('slotens','=',record.tranche_horaire_id.name),('jour','=','Semaine'),('mois','=',liste[mois])])
                     if val:
                         record.coef = val.tauxens
                     else:
-                        val=self.env['mmrd.ensemble'].search([('name', '=',record.chaine),('slotens','=',record.tranche_horaire_id.name),('jour','=','semaine'),('mois','=',liste[mois-1])])
+                        val=self.env['mmrd.ensemble'].search([('name', '=',record.chaine),('slotens','=',record.tranche_horaire_id.name),('jour','=','Semaine'),('mois','=',liste[mois-1])])
                         if val:
                             record.coef = val.tauxens
                 if (fields.Date.from_string(record.date)).weekday()==5:
@@ -248,11 +248,11 @@ class plm_unit(models.Model):
             if record.option == "tv":
                 mois = (fields.Date.from_string(record.date)).month
                 if 0<=(fields.Date.from_string(record.date)).weekday()<=4:
-                    val = self.env['mm.ensemble'].search([('name', '=',record.chaine),('slotens','=',record.tranche_horaire_id.name),('jour','=','semaine'),('mois','=',liste[mois])])
+                    val = self.env['mm.ensemble'].search([('name', '=',record.chaine),('slotens','=',record.tranche_horaire_id.name),('jour','=','Semaine'),('mois','=',liste[mois])])
                     if val:
                         record.coef = val.tauxens
                     else:
-                        val=self.env['mm.ensemble'].search([('name', '=',record.chaine),('slotens','=',record.tranche_horaire_id.name),('jour','=','semaine'),('mois','=',liste[mois-1])])
+                        val=self.env['mm.ensemble'].search([('name', '=',record.chaine),('slotens','=',record.tranche_horaire_id.name),('jour','=','Semaine'),('mois','=',liste[mois-1])])
                         if val:
                             record.coef = val.tauxens
                 if (fields.Date.from_string(record.date)).weekday()==5:

@@ -51,7 +51,7 @@
                         <span t-field="o.user_id.image" t-field-options='{"widget": "image"}' style="margin-top:1cm;width:3cm;height:3cm;" />
                     </div>
                     <div class="col-xs-6"> 
-                        <h3 style="margin-top:1cm"><span t-field="o.name" style="color:#555487;"/></h3>
+                        <h3 style="margin-top:1cm">Spot : <span t-field="o.name" style="color:#555487;"/></h3>
                         <table class="table table-bordered" style="margin-top:1cm;">
                             <tr>
                                 <td class="text-left" style="font-weight:900"> Auteur : </td> 
